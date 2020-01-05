@@ -22,10 +22,7 @@ export default {
       .then(user => {
         const dbUser = {
           id: user.user.uid,
-          email: user.user.email,
-          password: payload.password,
-          firstName: payload.firstName,
-          lastName: payload.lastName
+          ...payload
         }
         const newUser = {
           id: user.user.uid
@@ -33,7 +30,7 @@ export default {
         db.collection('users').doc(dbUser.id).set(dbUser)
         .then(() => {
           commit('setUser', newUser)
-          router.push({ name: 'about' })
+          router.push({ name: 'home' })
         })
       })
     },
@@ -44,7 +41,7 @@ export default {
           id: user.user.uid
         }
         commit('setUser', newUser)
-        router.push({ name: 'about' })
+        router.push({ name: 'home' })
       })
     },
     autoLogin ({commit}, payload) {
@@ -57,6 +54,7 @@ export default {
       firebase.auth().signOut()
       .then(() => {
         commit('setUser', null)
+        router.push({ name: 'login' })
       })
     }
   }

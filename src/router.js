@@ -2,6 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from './views/Home.vue'
 import Signup from '@/components/Signup.vue'
+import As from '@/components/As.vue'
+import Login from '@/components/Login.vue'
+import firebase from 'firebase'
 
 Vue.use(VueRouter)
 
@@ -9,12 +12,46 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: Home
+    component: Home,
+    beforeEnter: (to, from, next) => {
+      if (firebase.auth().currentUser)
+        next()
+      else
+        next({ name: 'login' })
+    }
   },
   {
     path: '/signup',
     name: 'signup',
-    component: Signup
+    component: Signup,
+    beforeEnter: (to, from, next) => {
+      if (firebase.auth().currentUser)
+        next({ name: 'home' })
+      else
+        next()
+    }
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login,
+    beforeEnter: (to, from, next) => {
+      if (firebase.auth().currentUser)
+        next({ name: 'home' })
+      else
+        next()
+    }
+  },
+  {
+    path: '/as',
+    name: 'as',
+    component: As,
+    beforeEnter: (to, from, next) => {
+      if (firebase.auth().currentUser)
+        next({ name: 'home' })
+      else
+        next()
+    }
   },
   {
     path: '/about',
